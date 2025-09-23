@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  pmis-portal:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=http://localhost:8000
+    volumes:
+      - ./dist:/app/dist
+    restart: unless-stopped
+
+  # Add backend service when available
+  # pmis-backend:
+  #   image: pmis-backend:latest
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - DATABASE_URL=your_database_url
+  #   restart: unless-stopped
