@@ -6,6 +6,9 @@ export interface User {
   aadhaar?: string;
   education: string;
   state: string;
+  location?: string;
+  bio?: string;
+  skills: string[];
   profilePicture?: string;
   isVerified: boolean;
   createdAt: string;
@@ -61,6 +64,13 @@ export interface RegisterData {
   aadhaar: string;
   education: string;
   state: string;
+  // Eligibility fields
+  age: string;
+  jobStatus: string;
+  educationStatus: string;
+  familyIncome: string;
+  govtJob: string;
+  eligibilityConfirm: boolean;
 }
 
 export interface InternshipFilters {

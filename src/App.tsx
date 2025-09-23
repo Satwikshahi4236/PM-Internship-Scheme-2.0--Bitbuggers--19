@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HomePage from '@/pages/HomePage';
+import DashboardPage from '@/pages/DashboardPage';
 import InternshipPortal from '@/pages/InternshipPortal';
 import AuthPage from '@/pages/AuthPage';
 import ContactPage from '@/pages/ContactPage';
@@ -43,7 +44,10 @@ function App() {
               {/* Add more routes as needed */}
               <Route path="/about" element={<div className="p-8">About Page - Coming Soon</div>} />
               <Route path="/eligibility" element={<div className="p-8">Eligibility Page - Coming Soon</div>} />
-              <Route path="/dashboard" element={<div className="p-8">Dashboard - Coming Soon</div>} />
+              <Route 
+                path="/dashboard" 
+                element={isAuthenticated ? <DashboardPage /> : <AuthPage />} 
+              />
             </Routes>
           </main>
           <Footer />

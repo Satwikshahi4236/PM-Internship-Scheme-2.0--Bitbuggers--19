@@ -10,6 +10,15 @@ export interface Database {
           aadhaar: string | null;
           education: string;
           state: string;
+          age_range: string | null;
+          job_status: string | null;
+          education_status: string | null;
+          family_income: string | null;
+          govt_job_status: string | null;
+          eligibility_confirmed: boolean;
+          bio: string | null;
+          skills: string[];
+          location: string | null;
           profile_picture: string | null;
           is_verified: boolean;
           created_at: string;
@@ -23,6 +32,15 @@ export interface Database {
           aadhaar?: string | null;
           education: string;
           state: string;
+          age_range?: string | null;
+          job_status?: string | null;
+          education_status?: string | null;
+          family_income?: string | null;
+          govt_job_status?: string | null;
+          eligibility_confirmed?: boolean;
+          bio?: string | null;
+          skills?: string[];
+          location?: string | null;
           profile_picture?: string | null;
           is_verified?: boolean;
           created_at?: string;
@@ -36,6 +54,15 @@ export interface Database {
           aadhaar?: string | null;
           education?: string;
           state?: string;
+          age_range?: string | null;
+          job_status?: string | null;
+          education_status?: string | null;
+          family_income?: string | null;
+          govt_job_status?: string | null;
+          eligibility_confirmed?: boolean;
+          bio?: string | null;
+          skills?: string[];
+          location?: string | null;
           profile_picture?: string | null;
           is_verified?: boolean;
           created_at?: string;
@@ -156,6 +183,117 @@ export interface Database {
           user_id?: string;
           status?: 'pending' | 'accepted' | 'rejected' | 'interview';
           applied_at?: string;
+          updated_at?: string;
+        };
+      };
+      user_documents: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          type: 'resume' | 'cover-letter' | 'certificate' | 'other';
+          file_url: string;
+          file_size: number | null;
+          upload_date: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          type: 'resume' | 'cover-letter' | 'certificate' | 'other';
+          file_url: string;
+          file_size?: number | null;
+          upload_date?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          name?: string;
+          type?: 'resume' | 'cover-letter' | 'certificate' | 'other';
+          file_url?: string;
+          file_size?: number | null;
+          upload_date?: string;
+          created_at?: string;
+        };
+      };
+      user_projects: {
+        Row: {
+          id: string;
+          user_id: string;
+          title: string;
+          description: string;
+          technologies: string[];
+          start_date: string | null;
+          end_date: string | null;
+          project_url: string | null;
+          github_url: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          title: string;
+          description: string;
+          technologies?: string[];
+          start_date?: string | null;
+          end_date?: string | null;
+          project_url?: string | null;
+          github_url?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          title?: string;
+          description?: string;
+          technologies?: string[];
+          start_date?: string | null;
+          end_date?: string | null;
+          project_url?: string | null;
+          github_url?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      user_work_experience: {
+        Row: {
+          id: string;
+          user_id: string;
+          company: string;
+          position: string;
+          start_date: string | null;
+          end_date: string | null;
+          description: string | null;
+          location: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          company: string;
+          position: string;
+          start_date?: string | null;
+          end_date?: string | null;
+          description?: string | null;
+          location?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          company?: string;
+          position?: string;
+          start_date?: string | null;
+          end_date?: string | null;
+          description?: string | null;
+          location?: string | null;
+          created_at?: string;
           updated_at?: string;
         };
       };

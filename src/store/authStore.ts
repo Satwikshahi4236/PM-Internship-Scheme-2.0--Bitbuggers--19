@@ -36,6 +36,9 @@ export const useAuthStore = create<AuthState>()(
               aadhaar: profile?.aadhaar,
               education: profile?.education || '',
               state: profile?.state || '',
+              location: profile?.location,
+              bio: profile?.bio,
+              skills: profile?.skills || [],
               profilePicture: profile?.profile_picture,
               isVerified: profile?.is_verified || false,
               createdAt: profile?.created_at || user.created_at,
@@ -76,6 +79,12 @@ export const useAuthStore = create<AuthState>()(
                 aadhaar: userData.aadhaar,
                 education: userData.education,
                 state: userData.state,
+                age_range: userData.age,
+                job_status: userData.jobStatus,
+                education_status: userData.educationStatus,
+                family_income: userData.familyIncome,
+                govt_job_status: userData.govtJob,
+                eligibility_confirmed: userData.eligibilityConfirm,
               });
 
             if (profileError) {
@@ -90,6 +99,9 @@ export const useAuthStore = create<AuthState>()(
               aadhaar: userData.aadhaar,
               education: userData.education,
               state: userData.state,
+              location: null,
+              bio: null,
+              skills: [],
               profilePicture: undefined,
               isVerified: false,
               createdAt: data.user.created_at,

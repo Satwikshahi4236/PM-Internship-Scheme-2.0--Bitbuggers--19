@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { 
   Select,
   SelectContent,
@@ -15,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 
 const loginSchema = z.object({
@@ -32,6 +34,15 @@ const registerSchema = z.object({
   aadhaar: z.string().regex(/^\d{12}$/, 'Aadhaar must be 12 digits'),
   education: z.string().min(1, 'Please select education level'),
   state: z.string().min(1, 'Please select state'),
+  // Eligibility fields
+  age: z.string().min(1, 'Please select your age range'),
+  jobStatus: z.string().min(1, 'Please select your job status'),
+  educationStatus: z.string().min(1, 'Please select your education status'),
+  familyIncome: z.string().min(1, 'Please select family income range'),
+  govtJob: z.string().min(1, 'Please confirm government job status'),
+  eligibilityConfirm: z.boolean().refine(val => val === true, {
+    message: 'You must confirm eligibility to proceed',
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -83,6 +94,12 @@ export default function AuthPage() {
       aadhaar: '',
       education: '',
       state: '',
+      age: '',
+      jobStatus: '',
+      educationStatus: '',
+      familyIncome: '',
+      govtJob: '',
+      eligibilityConfirm: false,
     },
   });
 
@@ -366,6 +383,199 @@ export default function AuthPage() {
                           {registerForm.formState.errors.confirmPassword.message}
                         </p>
                       )}
+                    </div>
+                  </div>
+
+                  {/* Eligibility Section */}
+                  <div className="border-t pt-6 mt-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <CheckCircle className="h-5 w-5 text-orange-600" />
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Eligibility Criteria
+                      </h3>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-6">
+                      Please confirm that you meet all eligibility requirements for the Prime Minister Internship Scheme.
+                    </p>
+
+                    <div className="space-y-6">
+                      {/* Age */}
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">
+                          Age Range *
+                        </Label>
+                        <RadioGroup
+                          value={registerForm.watch('age')}
+                          onValueChange={(value) => registerForm.setValue('age', value)}
+                          className="mt-2"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="21-24" id="age-eligible" />
+                            <Label htmlFor="age-eligible" className="text-sm">
+                              21-24 Years (Eligible)
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="other" id="age-other" />
+                            <Label htmlFor="age-other" className="text-sm text-gray-500">
+                              Other (Not Eligible)
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                        {registerForm.formState.errors.age && (
+                          <p className="text-sm text-red-600 mt-1">
+                            {registerForm.formState.errors.age.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Job Status */}
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">
+                          Current Job Status *
+                        </Label>
+                        <RadioGroup
+                          value={registerForm.watch('jobStatus')}
+                          onValueChange={(value) => registerForm.setValue('jobStatus', value)}
+                          className="mt-2"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="not-employed" id="job-not-employed" />
+                            <Label htmlFor="job-not-employed" className="text-sm">
+                              Not Employed Full Time (Eligible)
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="employed" id="job-employed" />
+                            <Label htmlFor="job-employed" className="text-sm text-gray-500">
+                              Employed Full Time (Not Eligible)
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                        {registerForm.formState.errors.jobStatus && (
+                          <p className="text-sm text-red-600 mt-1">
+                            {registerForm.formState.errors.jobStatus.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Education Status */}
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">
+                          Current Education Status *
+                        </Label>
+                        <RadioGroup
+                          value={registerForm.watch('educationStatus')}
+                          onValueChange={(value) => registerForm.setValue('educationStatus', value)}
+                          className="mt-2"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="not-enrolled" id="edu-not-enrolled" />
+                            <Label htmlFor="edu-not-enrolled" className="text-sm">
+                              Not Enrolled Full Time (Eligible)
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="enrolled" id="edu-enrolled" />
+                            <Label htmlFor="edu-enrolled" className="text-sm text-gray-500">
+                              Enrolled Full Time (Not Eligible)
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                        {registerForm.formState.errors.educationStatus && (
+                          <p className="text-sm text-red-600 mt-1">
+                            {registerForm.formState.errors.educationStatus.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Family Income */}
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">
+                          Family Income (Self/Spouse/Parents) *
+                        </Label>
+                        <RadioGroup
+                          value={registerForm.watch('familyIncome')}
+                          onValueChange={(value) => registerForm.setValue('familyIncome', value)}
+                          className="mt-2"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="below-8-lakhs" id="income-eligible" />
+                            <Label htmlFor="income-eligible" className="text-sm">
+                              No one earning more than ₹8 Lakhs PA (Eligible)
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="above-8-lakhs" id="income-not-eligible" />
+                            <Label htmlFor="income-not-eligible" className="text-sm text-gray-500">
+                              Someone earning more than ₹8 Lakhs PA (Not Eligible)
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                        {registerForm.formState.errors.familyIncome && (
+                          <p className="text-sm text-red-600 mt-1">
+                            {registerForm.formState.errors.familyIncome.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Government Job */}
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">
+                          Government Job in Family *
+                        </Label>
+                        <RadioGroup
+                          value={registerForm.watch('govtJob')}
+                          onValueChange={(value) => registerForm.setValue('govtJob', value)}
+                          className="mt-2"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="no-govt-job" id="govt-job-no" />
+                            <Label htmlFor="govt-job-no" className="text-sm">
+                              No family member has Government Job (Eligible)
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="has-govt-job" id="govt-job-yes" />
+                            <Label htmlFor="govt-job-yes" className="text-sm text-gray-500">
+                              Family member has Government Job (Not Eligible)
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                        {registerForm.formState.errors.govtJob && (
+                          <p className="text-sm text-red-600 mt-1">
+                            {registerForm.formState.errors.govtJob.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Eligibility Confirmation */}
+                      <div className="bg-orange-50 p-4 rounded-lg">
+                        <div className="flex items-start space-x-3">
+                          <Checkbox
+                            id="eligibility-confirm"
+                            checked={registerForm.watch('eligibilityConfirm')}
+                            onCheckedChange={(checked) => 
+                              registerForm.setValue('eligibilityConfirm', checked as boolean)
+                            }
+                            className="mt-1"
+                          />
+                          <div>
+                            <Label htmlFor="eligibility-confirm" className="text-sm font-medium text-gray-900">
+                              I confirm that I meet all eligibility criteria
+                            </Label>
+                            <p className="text-xs text-gray-600 mt-1">
+                              By checking this box, I declare that all information provided is true and accurate.
+                              I understand that providing false information may result in disqualification.
+                            </p>
+                          </div>
+                        </div>
+                        {registerForm.formState.errors.eligibilityConfirm && (
+                          <p className="text-sm text-red-600 mt-2">
+                            {registerForm.formState.errors.eligibilityConfirm.message}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
 
